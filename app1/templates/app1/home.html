@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - MyWebsite{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <div class="container">
+        <h1>Welcome to MyWebsite</h1>
+        <p>Innovating the future with technology and creativity.</p>
+        <a href="{% url 'services' %}" class="btn btn-light btn-lg">Explore Services</a>
+    </div>
+</div>
+
+<div class="container text-center">
+    <h2 class="mt-5">Why Choose Us?</h2>
+    <p class="lead">We offer top-notch services with a customer-centric approach.</p>
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <h4>Expert Team</h4>
+            <p>We have highly skilled professionals in our team.</p>
+        </div>
+        <div class="col-md-4">
+            <h4>Latest Technology</h4>
+            <p>We stay updated with modern technology trends.</p>
+        </div>
+        <div class="col-md-4">
+            <h4>Customer Support</h4>
+            <p>We offer 24/7 customer assistance to our clients.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
