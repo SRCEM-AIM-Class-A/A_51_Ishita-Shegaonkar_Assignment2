@@ -1,49 +1,48 @@
 pipeline {
-    agent any
+    agent any 
 
     environment {
-        DOCKER_PATH = "C:/Program Files/Docker/Docker/resources/bin/docker.exe"
-        IMAGE_NAME = "ishita1455/studentproject"
-        IMAGE_TAG = "latest"
-        DOCKER_HUB_USERNAME = "ishita1455"
+        DOCKER_IMAGE = "ishita1455/studentproject:latest"
     }
 
     stages {
-        stage('Checkout') {
+        stage('Clone Repository') {
             steps {
-                echo "Checking out the source code..."
-                git 'https://github.com/YOUR_GITHUB_USERNAME/YOUR_REPO.git'
+                echo "Cloning repository from GitHub..."
+                git branch: 'main', url: 'https://github.com/SRCEM-AIM-Class-A/A_51_Ishita-Shegaonkar_Assignment2.git'
             }
         }
 
         stage('Build Docker Image') {
             steps {
                 echo "Building Docker image..."
-                bat "${DOCKER_PATH} build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
+                sh 'docker build -t ${DOCKER_IMAGE} .'
             }
         }
 
         stage('Login to Docker Hub') {
             steps {
-                echo "Logging into Docker Hub..."
-                bat "echo YOUR_DOCKER_HUB_PASSWORD | ${DOCKER_PATH} login -u ${DOCKER_HUB_USERNAME} --password-stdin"
+                echo "Logging in to Docker Hub..."
+                withCredentials([string(credentialsId: 'docker-hub-password', variable: 'DOCKER_PASSWORD')]) {
+                    sh 'echo "$DOCKER_PASSWORD" | docker login -u "ishita1455" --password-stdin'
+                }
             }
         }
 
         stage('Push Docker Image') {
             steps {
-                echo "Pushing image to Docker Hub..."
-                bat "${DOCKER_PATH} push ${IMAGE_NAME}:${IMAGE_TAG}"
+                echo "Pushing Docker image to Docker Hub..."
+                sh 'docker push ${DOCKER_IMAGE}'
             }
         }
     }
 
     post {
         success {
-            echo "Deployment successful! 🎉"
+            echo "✅ CI/CD Pipeline completed successfully! 🚀"
         }
         failure {
-            echo "Build failed! ❌"
+            echo "❌ Pipeline failed! Check the logs for errors."
         }
     }
 }
